@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Game Studio",
+  "name": "Tool for creation js-dos bundles",
   "icons": [
     {
       "src": "favicon.ico",
