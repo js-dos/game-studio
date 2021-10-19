@@ -12,5 +12,5 @@ yarn start
 
 ```
 cd build
-PUBLIC_URL=/game-studio yarn build && aws s3 sync . s3://dos.zone/game-studio --delete
+PUBLIC_URL=/studio yarn build && aws s3 sync . s3://dos.zone/studio --delete
 ```
