@@ -6766,10 +6766,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-dos@^7.2.3:
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/js-dos/-/js-dos-7.2.3.tgz#d1c4a8768a503811f038a67bd81815e1d3d24b56"
-  integrity sha512-DI2Qb4UNk1PO6ycL35qd7YhXSHmzYPEzuF8FCjwI7Ek/iCCxcS2/Uvc9oe5yLs87rgZEosWTlvDtWA0CCE/M8A==
+js-dos@^7.2.5:
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/js-dos/-/js-dos-7.2.5.tgz#a4936959e76fc7345f78cc1c4b78a0c8ec0f4a9c"
+  integrity sha512-bcVv4vm3YDNA11POwWCjBwhgHdGVzz+erHriGSfb9MENkA1pRU0esTFj1Ab/79KwjdjicSz4yDOnGtUBIcgjog==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
