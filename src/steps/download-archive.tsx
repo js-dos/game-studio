@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { AnchorButton, Button, Intent } from "@blueprintjs/core";
+import { AnchorButton, Button, ButtonGroup, Intent, Spinner } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
@@ -12,7 +12,8 @@ import { createArchive } from "./create-archive";
 import "./steps.css";
 
 import { t } from "../i18n";
-
+import { postObject, send } from "../xhr";
+import { presonalBundlePut, personalBundleAcl, personalBundlePrefix } from "./config";
 
 export function DownloadArchive(props: StepProps) {
     const { state, back } = props;
@@ -25,6 +26,11 @@ export function DownloadArchive(props: StepProps) {
     const [bundleUrl, setBundleUrl] = useState<string | undefined>(url);
     const [dos, setDos] = useState<DosInstance | null>(null);
     const [config, setConfig] = useState<{ layersConfig?: LayersConfig }>(state.config as any || {});
+    const [uploading, setUploading] = useState<boolean>(false);
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
+    const [error, setError] = useState<string | null>(null);
+    const [showPersonalUrl, setShowPersonalUrl] = useState<boolean>(false);
+    const personalUrl = personalBundlePrefix + props.state.token + "/bundle.jsdos";
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -55,6 +61,48 @@ export function DownloadArchive(props: StepProps) {
         setUrl(newUrl);
     };
 
+    const onUpload = async () => {
+        setError(null);
+        setUploadProgress(0);
+        setUploading(true);
+        setShowPersonalUrl(false);
+
+        try {
+            const token = props.state.token;
+            const uploadUrl = encodeURIComponent(personalBundlePrefix + "bundle.jsdos");
+            const archive = await createArchive(config as DosConfig, state.zip as Uint8Array);
+            const result = await postObject(presonalBundlePut + "?namespace=studio&id=" +
+                token + "&bundleUrl=" + uploadUrl);
+
+            if (!result.success) {
+                throw new Error("Unable to put personal bundle: " + result.errorCode);
+            }
+
+            const payload = JSON.parse(result.payload);
+            const headers = payload.signature as { [name: string]: string };
+            const url = payload.url as string;
+
+            headers["x-amz-content-sha256"] = "UNSIGNED-PAYLOAD";
+            await send("put",
+                url,
+                "text",
+                archive.buffer,
+                setUploadProgress,
+                headers);
+
+            if (!(await postObject(personalBundleAcl + "?namespace=studio&id=" +
+                token + "&bundleUrl=" + uploadUrl)).success) {
+                throw new Error("Can't set ACL to personal bundle:");
+            }
+
+            setShowPersonalUrl(true);
+        } catch (e: any) {
+            setError(e.message);
+        }
+
+        setUploading(false);
+    };
+
     const onStopStart = () => {
         if (bundleUrl) {
             setBundleUrl(undefined);
@@ -81,13 +129,31 @@ export function DownloadArchive(props: StepProps) {
     return <div className="download-archive-container">
         <div className="download-archive-actions">
             <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
-            <Button onClick={onDownload}
-                icon={IconNames.ARCHIVE}
-                intent={Intent.PRIMARY}>{t("download")}</Button>
             <Button onClick={onStopStart}
                 icon={bundleUrl ? IconNames.STOP : IconNames.PLAY}
                 intent={bundleUrl ? Intent.WARNING : Intent.SUCCESS}>{bundleUrl ? t("stop") : t("start")}</Button>
+            <ButtonGroup>
+                <Button onClick={onUpload}
+                    icon={IconNames.CLOUD_UPLOAD}
+                    disabled={uploading}
+                    intent={Intent.PRIMARY}>{ uploading ?
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                            <Spinner size={16} />&nbsp;&nbsp;{uploadProgress}%
+                        </div> :
+                        t("download") }</Button>
+                <Button onClick={onDownload}
+                    disabled={uploading}
+                    icon={IconNames.ARCHIVE}></Button>
+            </ButtonGroup>
         </div>
+        { error !== null ? <div style={{ color: "#C23030" }}>Unexpected error: {error}</div> : null }
+        {
+            showPersonalUrl ?
+                <div>
+                    Cloud URL: <a href={personalUrl} rel="noreferrer" target="_blank">{personalUrl}</a>
+                </div> :
+                null
+        }
         <div className="download-archive-player-and-layers">
             <div className="download-archive-player">
                 {bundleUrl === undefined ? null :

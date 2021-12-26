@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 
-import { FileInput, Intent, Spinner } from "@blueprintjs/core";
+import { FileInput, InputGroup, Intent, Spinner, Button } from "@blueprintjs/core";
 import { getZipData } from "../zip-explorer";
 import { restoreConfig, StepProps } from "../state";
 import { t } from "../i18n";
+import { personalBundlePrefix } from "./config";
 
 export function InitFromFile(props: StepProps) {
     const { state, nextStep } = props;
     const [error, setError] = useState<string>("");
     const [loadProgress, setLoadProgress] = useState<number>(0);
     const [reader, setReader] = useState<FileReader | null>(null);
+    const [url, setUrl] = useState<string | null>(props.state.token);
 
     function onInputChange(e: any) {
         const files = e.currentTarget.files as FileList;
@@ -47,6 +49,23 @@ export function InitFromFile(props: StepProps) {
         setReader(reader);
     }
 
+    function onUrlChange(e: any) {
+        setUrl(e.target.value || null);
+    }
+
+    function onLoadUrl(e: any) {
+        if (url === null) {
+            return;
+        }
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            props.state.setToken(url);
+            window.location.href = "/studio/?url=" + encodeURIComponent(personalBundlePrefix + url + "/bundle.jsdos");
+        } else {
+            window.location.href = "/studio/?url=" + encodeURIComponent(url);
+        }
+    }
+
     return <div>
         <p>
             {t("upload")}&nbsp;
@@ -64,5 +83,24 @@ export function InitFromFile(props: StepProps) {
             <span
                 style={{ color: "#DB3737", display: (error.length === 0 ? "none" : "block") }}>*&nbsp;{error}</span>
         </p>
+        <p>
+            <strong>OR</strong>
+        </p>
+        <p>
+            Enter&nbsp;
+            <span style={{ color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737" }}>URL</span>
+            &nbsp;or&nbsp;
+            <span style={{ color: "#D9822B", fontWeight: "bold", borderBottom: "2px solid #DB3737" }}>TOKEN</span>
+            &nbsp;to load jsdos bundle
+        </p>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+            <InputGroup
+                value={url ?? ""}
+                onChange={onUrlChange}
+                fill={false}
+                rightElement={<Button disabled={url === null}
+                    intent={Intent.PRIMARY}
+                    onClick={onLoadUrl}>Load</Button>} />
+        </div>
     </div>;
 };

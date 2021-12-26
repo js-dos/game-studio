@@ -34,6 +34,12 @@ export function send(method: "get" | "post" | "head" | "put",
                     onprogress(porgress);
                 }
             };
+            request.upload.onprogress = (event) => {
+                if (event.loaded && event.total && event.total > 0) {
+                    const porgress = Math.round(event.loaded * 10000 / event.total) / 100;
+                    onprogress(porgress);
+                }
+            };
         }
 
         if (headers !== undefined) {

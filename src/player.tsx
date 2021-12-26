@@ -1,7 +1,8 @@
-import { DosInstance, DosFactoryType } from "emulators-ui/dist/types/js-dos";
+import { DosPlayerFactoryType } from "js-dos";
+import { DosInstance } from "emulators-ui/dist/types/js-dos";
 import { useEffect, useRef } from "react";
 
-declare const Dos: DosFactoryType;
+declare const Dos: DosPlayerFactoryType;
 
 export interface IPlayerProps {
     bundleUrl: string;
@@ -32,7 +33,8 @@ export function Player(props: IPlayerProps) {
 
         // eslint-disable-next-line new-cap
         const instance = Dos(root, {
-            // no-options
+            donate: true,
+            hardware: (window as any).hardware,
         });
 
         if (props.onDosInstance) {

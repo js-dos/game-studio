@@ -6,6 +6,9 @@ import { JsDosZipData } from "./zip-explorer";
 declare const emulators: Emulators;
 
 export interface State {
+    token: string,
+    setToken: (token: string) => void,
+
     url?: string,
     name?: string,
     zip?: Uint8Array,
