@@ -15,6 +15,8 @@ import { t } from "../i18n";
 import { postObject, send } from "../xhr";
 import { presonalBundlePut, personalBundleAcl, personalBundlePrefix } from "./config";
 
+const isNative = (window as any).hardware !== undefined;
+
 export function DownloadArchive(props: StepProps) {
     const { state, back } = props;
     const [url, setUrl] = useState<string>(() => {
@@ -129,9 +131,10 @@ export function DownloadArchive(props: StepProps) {
     return <div className="download-archive-container">
         <div className="download-archive-actions">
             <Button onClick={back} icon={IconNames.ARROW_LEFT}>{t("back")}</Button>
-            <Button onClick={onStopStart}
-                icon={bundleUrl ? IconNames.STOP : IconNames.PLAY}
-                intent={bundleUrl ? Intent.WARNING : Intent.SUCCESS}>{bundleUrl ? t("stop") : t("start")}</Button>
+            { isNative ? null :
+                <Button onClick={onStopStart}
+                    icon={bundleUrl ? IconNames.STOP : IconNames.PLAY}
+                    intent={bundleUrl ? Intent.WARNING : Intent.SUCCESS}>{bundleUrl ? t("stop") : t("start")}</Button> }
             <ButtonGroup>
                 <Button onClick={onUpload}
                     icon={IconNames.CLOUD_UPLOAD}
@@ -141,9 +144,10 @@ export function DownloadArchive(props: StepProps) {
                             <Spinner size={16} />&nbsp;&nbsp;{uploadProgress}%
                         </div> :
                         t("download") }</Button>
-                <Button onClick={onDownload}
-                    disabled={uploading}
-                    icon={IconNames.ARCHIVE}></Button>
+                { isNative ? null :
+                    <Button onClick={onDownload}
+                        disabled={uploading}
+                        icon={IconNames.ARCHIVE}></Button> }
             </ButtonGroup>
         </div>
         { error !== null ? <div style={{ color: "#C23030" }}>Unexpected error: {error}</div> : null }
