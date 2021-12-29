@@ -67,6 +67,9 @@ export function GameStudio() {
             setStep(step - 1);
         },
         restart: () => {
+            if (window.location.search.length > 0) {
+                window.location.search = "";
+            }
             setState({ token, setToken, canSkipArchiveCreation: false });
             setStep(1);
         },
@@ -106,7 +109,6 @@ export function GameStudio() {
                     style={{
                         marginLeft: "10px",
                         marginTop: "-20px",
-                        visibility: (step > 1 ? "visible" : "hidden"),
                     }}
                     className={Classes.MINIMAL}
                     icon={IconNames.CROSS}

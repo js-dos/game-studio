@@ -41,7 +41,7 @@ export function ConfigureDosbox(props: StepProps) {
 
     const createArchive = async () => {
         setLoading(true);
-        const archive = await createZipArchive(config as DosConfig, state.zip as Uint8Array);
+        const archive = await createZipArchive(config as DosConfig, state.zip as Uint8Array, null);
 
         nextStep({
             ...state,

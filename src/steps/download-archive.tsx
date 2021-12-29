@@ -44,7 +44,7 @@ export function DownloadArchive(props: StepProps) {
 
     const onDownload = async () => {
         URL.revokeObjectURL(url);
-        const archive = await createArchive(config as DosConfig, state.zip as Uint8Array);
+        const archive = await createArchive(config as DosConfig, state.zip as Uint8Array, dos);
         const blob = new Blob([archive], {
             type: "application/zip",
         });
@@ -72,7 +72,7 @@ export function DownloadArchive(props: StepProps) {
         try {
             const token = props.state.token;
             const uploadUrl = encodeURIComponent(personalBundlePrefix + "bundle.jsdos");
-            const archive = await createArchive(config as DosConfig, state.zip as Uint8Array);
+            const archive = await createArchive(config as DosConfig, state.zip as Uint8Array, dos);
             const result = await postObject(presonalBundlePut + "?namespace=studio&id=" +
                 token + "&bundleUrl=" + uploadUrl);
 

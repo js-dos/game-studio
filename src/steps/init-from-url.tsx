@@ -48,7 +48,7 @@ export function InitFromUrl(url: string) {
                         return;
                     }
 
-                    setError(e);
+                    setError(e.message);
                 });
 
             return () => {
