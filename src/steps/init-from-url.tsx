@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "@blueprintjs/core";
 import { getZipData } from "../zip-explorer";
 import { restoreConfig, StepProps } from "../state";
-import { cdnUrl } from "../config";
 import { getBuffer } from "../xhr";
 
 import { t } from "../i18n";
@@ -19,7 +18,7 @@ export function InitFromUrl(url: string) {
             }
 
             let cancel = false;
-            getBuffer(cdnUrl(url))
+            getBuffer(url)
                 .then(async (data) => {
                     if (cancel) {
                         return;

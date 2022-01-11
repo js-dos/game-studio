@@ -17,7 +17,7 @@ import { presonalBundlePut, personalBundleAcl, personalBundlePrefix } from "./co
 
 const isNative = (window as any).hardware !== undefined;
 
-export function DownloadArchive(props: StepProps) {
+export function PublishArchive(props: StepProps) {
     const { state, back } = props;
     const [url, setUrl] = useState<string>(() => {
         const blob = new Blob([state.bundle as Uint8Array], {
@@ -113,11 +113,6 @@ export function DownloadArchive(props: StepProps) {
         }
     };
 
-    const gameTopicComponent = <AnchorButton
-        href={"https://talks.dos.zone/search?expanded=true&q=" + encodeURIComponent((state.name || "") + " #en")}
-        target="_blank"
-        icon={IconNames.COMMENT}>{t("open_topic")}</AnchorButton>;
-
     function applyLayersConfig(layersConfig: LayersConfig) {
         if (dos === null) {
             return;
@@ -148,6 +143,11 @@ export function DownloadArchive(props: StepProps) {
                     <Button onClick={onDownload}
                         disabled={uploading}
                         icon={IconNames.ARCHIVE}></Button> }
+                <AnchorButton
+                    href="https://talks.dos.zone/"
+                    target="_blank"
+                    intent={Intent.SUCCESS}
+                    icon={IconNames.SEND_MESSAGE} />
             </ButtonGroup>
         </div>
         { error !== null ? <div style={{ color: "#C23030" }}>Unexpected error: {error}</div> : null }
@@ -169,9 +169,6 @@ export function DownloadArchive(props: StepProps) {
             <div className="download-archive-layers">
                 <LayersEditor onApply={applyLayersConfig} layersConfig={config.layersConfig} />
             </div>
-        </div>
-        <div className="download-archive-actions">
-            {gameTopicComponent}
         </div>
 
         <br />

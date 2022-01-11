@@ -8,7 +8,7 @@ import { InitFromFile } from "./steps/init-from-file";
 import { InitFromUrl } from "./steps/init-from-url";
 import { SelectExecutable } from "./steps/select-executable";
 import { ConfigureDosbox } from "./steps/configure-dosbox";
-import { DownloadArchive } from "./steps/download-archive";
+import { PublishArchive } from "./steps/publish-archive";
 
 import { parseQuery } from "./query-string";
 import { t } from "./i18n";
@@ -23,7 +23,7 @@ const localIdKey = "studio.token";
 const commonSteps = [
     SelectExecutable,
     ConfigureDosbox,
-    DownloadArchive,
+    PublishArchive,
 ];
 
 export function GameStudio() {

@@ -77,7 +77,7 @@ export function LayersEditor(props: {
     layersConfig?: LayersConfig,
 }) {
     const [layersConfig, setLayersConfig] = useState<LayersConfig>(props.layersConfig || {
-        version: 1,
+        version: 2,
         layers: [],
     });
     const [breadCrumbs, _setBreadCrumbs] = useState<BreadCrumbs>({});

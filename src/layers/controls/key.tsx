@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import { FormGroup, HTMLSelect, InputGroup, IOptionProps } from "@blueprintjs/core";
+import { Button, ButtonGroup, FormGroup, HTMLSelect, InputGroup, IOptionProps } from "@blueprintjs/core";
 import { LayerControl, LayerKeyControl } from "emulators-ui/dist/types/controls/layers-config";
 import { EditorStackProps } from "../layers-editor";
 import { getControl, getKeyCodeNameForCode, namedKeyCodes } from "./controls";
 
 import { t } from "../../i18n";
+import { IconNames } from "@blueprintjs/icons";
 
 export const KeyControl: React.FC<EditorStackProps> = (props) => {
     const [optional, setControl] = useState<LayerKeyControl | null>(null);
@@ -39,21 +40,46 @@ export const KeyControl: React.FC<EditorStackProps> = (props) => {
         return namedKeyCodes[key];
     }
 
-    function onChangeKey(event: any) {
-        control.mapTo = eventToKeyCode(event);
-        control.symbol = mapKBDToSymbol(getKeyCodeNameForCode(control.mapTo));
+    function onChangeKey(event: any, index: number) {
+        control.mapTo[index] = eventToKeyCode(event);
+        control.symbol = mapKBDToSymbol(getKeyCodeNameForCode(control.mapTo[0]));
+        setVersion(version + 1);
+    }
+
+    function addKey() {
+        control.mapTo.push(0);
+        setVersion(version + 1);
+    }
+
+    function removeKey() {
+        if (control.mapTo.length < 2) {
+            return;
+        }
+        control.mapTo.pop();
         setVersion(version + 1);
     }
 
     return <div className="key-container">
-        <FormGroup
-            label={t("key")}
-            inline={true}>
-            <HTMLSelect minimal={false}
-                options={options}
-                onChange={(e) => onChangeKey(e)}
-                value={getKeyCodeNameForCode(control.mapTo)} />
-        </FormGroup>
+        {
+            control.mapTo.map((keyCode, index) => {
+                return <FormGroup
+                    key={"keyCode-" + index}
+                    label={index === 0 ? t("key") : "+"}
+                    inline={true}>
+                    <HTMLSelect minimal={false}
+                        options={options}
+                        onChange={(e) => onChangeKey(e, index)}
+                        value={getKeyCodeNameForCode(keyCode)} />
+                </FormGroup>;
+            })
+        }
+        <div style={{ display: "flex", alignItems: "baseline" }}>
+            <p>Combintaion&nbsp;&nbsp;</p>
+            <ButtonGroup>
+                <Button onClick={addKey} icon={IconNames.PLUS}></Button>
+                { control.mapTo.length > 1 ? <Button onClick={removeKey} icon={IconNames.MINUS}></Button> : null }
+            </ButtonGroup>
+        </div>
         <FormGroup
             label={t("symbol")}
             inline={true}>
@@ -65,7 +91,10 @@ export const KeyControl: React.FC<EditorStackProps> = (props) => {
 function initDefault(layerControl: LayerControl): LayerKeyControl {
     const control = layerControl as LayerKeyControl;
     control.symbol = control.symbol || mapKBDToSymbol("KBD_up");
-    control.mapTo = control.mapTo || namedKeyCodes.KBD_up;
+    control.mapTo = control.mapTo || [namedKeyCodes.KBD_up];
+    if (!Array.isArray(control.mapTo)) {
+        control.mapTo = [control.mapTo];
+    }
     return control;
 }
 
