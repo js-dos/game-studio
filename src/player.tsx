@@ -33,7 +33,6 @@ export function Player(props: IPlayerProps) {
 
         // eslint-disable-next-line new-cap
         const instance = Dos(root, {
-            donate: true,
             hardware: (window as any).hardware,
         });
 
