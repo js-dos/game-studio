@@ -10,7 +10,6 @@
     flex-direction: column;
     margin: 20px 0;
     justify-content: space-around;
-    border-bottom: 1px solid lightblue;
 }
 
 .download-archive-player {

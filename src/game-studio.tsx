@@ -85,6 +85,9 @@ export function GameStudio() {
         window.location.href = "/";
     }
 
+    const video = navigator.language === "ru-RU" ?
+        "YfQ_j-0YRJ8" : "hULc-RsZXow";
+
     return <div>
         <Navbar fixedToTop={false}>
             <Navbar.Group align={Alignment.LEFT}>
@@ -94,30 +97,52 @@ export function GameStudio() {
                 <NavbarDivider>
                     &nbsp;&nbsp;&nbsp;&nbsp;TOKEN: {token}
                 </NavbarDivider>
+                <NavbarDivider>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<a href={ "https://youtu.be/" + video }
+                        style={{ fontWeight: "bold" }}
+                        target="_blank" rel="noreferrer">📹&nbsp;Tutorial</a>
+                </NavbarDivider>
             </Navbar.Group>
         </Navbar>
-        <div style={{ padding: "20px", width: "100%" }}>
-            {step === 1 ? <H1>{t("welcome")}</H1> : null}
-            {step === 1 ?
-                <p>
-                    {t("description")}&nbsp;
-                </p> : null}
+        <div style={{
+            display: "flex", flexDirection: "row", flexWrap: "wrap",
+            padding: "20px", width: "100%",
+        }}>
+            <div style={{ marginRight: "40px", marginBottom: "20px" }}>
+                {step === 1 ? <H1>{t("welcome")}</H1> : null}
+                {step === 1 ?
+                    <p>
+                        {t("description")}&nbsp;
+                    </p> : null}
 
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <H2>{t("step")} {step}/{steps.length}</H2>
-                <AnchorButton
-                    style={{
-                        marginLeft: "10px",
-                        marginTop: "-20px",
-                    }}
-                    className={Classes.MINIMAL}
-                    icon={IconNames.CROSS}
-                    intent={Intent.DANGER}
-                    onClick={() => props.restart()}></AnchorButton>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <H2>{t("step")} {step}/{steps.length}</H2>
+                    <AnchorButton
+                        style={{
+                            marginLeft: "10px",
+                            marginTop: "-20px",
+                        }}
+                        className={Classes.MINIMAL}
+                        icon={IconNames.CROSS}
+                        intent={Intent.DANGER}
+                        onClick={() => props.restart()}></AnchorButton>
+                </div>
+                <div>
+                    {stepComponent}
+                </div>
             </div>
-            <div>
-                {stepComponent}
-            </div>
+            {
+                step === 1 ? <div>
+                    <H2>Tutorial</H2>
+                    <iframe width="560" height="315" style={{ maxWidth: "100%" }}
+                        src={ "https://www.youtube.com/embed/" + video }
+                        title="YouTube video player" frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen>
+                    </iframe>
+                </div> :
+                    null
+            }
         </div>
     </div>;
 }

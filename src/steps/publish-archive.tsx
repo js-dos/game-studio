@@ -43,6 +43,9 @@ export function PublishArchive(props: StepProps) {
     }, [url]);
 
     const onDownload = async () => {
+        setUploading(true);
+        setUploadProgress(0);
+
         URL.revokeObjectURL(url);
         const archive = await createArchive(config as DosConfig, state.zip as Uint8Array, dos);
         const blob = new Blob([archive], {
@@ -61,6 +64,7 @@ export function PublishArchive(props: StepProps) {
         a.remove();
 
         setUrl(newUrl);
+        setUploading(false);
     };
 
     const onUpload = async () => {
@@ -170,8 +174,5 @@ export function PublishArchive(props: StepProps) {
                 <LayersEditor onApply={applyLayersConfig} layersConfig={config.layersConfig} />
             </div>
         </div>
-
-        <br />
-        <div className="studio-bundle-url"><a href={decodeURIComponent(state.url || "#")}>source</a></div>
     </div>;
 }
