@@ -4258,15 +4258,15 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
-emulators-ui@^0.72.9:
-  version "0.72.9"
-  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.72.9.tgz#94e41bf2917d37ddcb89b92c7c2f79f0418c29d6"
-  integrity sha512-hwObkg1LnQw383xHn/EG+Jc7DjrgMsZOqB0cooJlgS/AMOv3A56Vw07DbH1THmGOlAXaxdThQCVF2JuMQuUYTw==
+emulators-ui@^0.73.1:
+  version "0.73.1"
+  resolved "https://registry.yarnpkg.com/emulators-ui/-/emulators-ui-0.73.1.tgz#2641e14cbeeb4089dc963fa893604e447ad28591"
+  integrity sha512-OA08X7ksFPfoYIGeV4oBkX8OgLi95ps3ApujtSKOKju4p+xTtwwPuJipeKSA25x097KxeRF9bOV9j7h6FN0+PA==
 
-emulators@^0.72.5:
-  version "0.72.5"
-  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.72.5.tgz#799141c482f633ce89e69eea1766894184a05d9c"
-  integrity sha512-YvGTwYQSsAr3PmC2YFKIN0p9Fl1JuRn7x1NH1RASjRhfew6okb47KuJOH+4SVt+RzI62RGBT/5ds85tUo3fklQ==
+emulators@^0.73.3:
+  version "0.73.3"
+  resolved "https://registry.yarnpkg.com/emulators/-/emulators-0.73.3.tgz#60321fb34723f43c2a85053a1574158cf15c4759"
+  integrity sha512-rq/T1/c6BxUt8V6e2mmDJChk60/6MMtdJwlySputasJHrF6uNeGxHtei2Iray1nlrTN11jB4PF42Hxt7/PxWXw==
 
 encodeurl@~1.0.2:
   version "1.0.2"
@@ -6639,10 +6639,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-dos@^7.3.6:
-  version "7.3.6"
-  resolved "https://registry.yarnpkg.com/js-dos/-/js-dos-7.3.6.tgz#ebe563973441ad9a553144772a31836198116f22"
-  integrity sha512-3n6BtEwEaxW0ky8/dJRYinjLfB64Ifpne16Fyr1i9QwOHeGfL81Tr8u8fhJWZSo4UA7EZnFt0OJvYnpQ5zKT7A==
+js-dos@^7.3.9:
+  version "7.3.9"
+  resolved "https://registry.yarnpkg.com/js-dos/-/js-dos-7.3.9.tgz#cc341abc5bae9926de616df9a7ab92d81589f3e1"
+  integrity sha512-uqLIJVWhOFUOVu3+Dmy1i74ehHy5x3Ceus6nYsJvPxrnBoKf7Gb/QK8b8i9XcDoxCq1ZO78SIgyb3Fvw9KjM5w==
   dependencies:
     nanoid "^3.1.30"
 
