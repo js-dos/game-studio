@@ -34,6 +34,7 @@ export function Player(props: IPlayerProps) {
         // eslint-disable-next-line new-cap
         const instance = Dos(root, {
             hardware: (window as any).hardware,
+            withExperimentalApi: true,
         });
 
         if (props.onDosInstance) {
