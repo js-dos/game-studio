@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { AnchorButton, Button, ButtonGroup, Intent, Spinner } from "@blueprintjs/core";
+import { AnchorButton, Button, ButtonGroup, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
@@ -32,6 +32,8 @@ export function PublishArchive(props: StepProps) {
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const [showPersonalUrl, setShowPersonalUrl] = useState<boolean>(false);
+    const [publishUrl, setPublishUrl] = useState<string>(state.url || "");
+    const [publishToken, setPublishToken] = useState<string>("");
     const personalUrl = personalBundlePrefix + props.state.token + "/bundle.jsdos";
 
     useEffect(() => {
@@ -67,7 +69,7 @@ export function PublishArchive(props: StepProps) {
         setUploading(false);
     };
 
-    const onUpload = async () => {
+    async function doUpload(rawUrl: string, publishToken?: string) {
         setError(null);
         setUploadProgress(0);
         setUploading(true);
@@ -75,16 +77,23 @@ export function PublishArchive(props: StepProps) {
 
         try {
             const token = props.state.token;
-            const uploadUrl = encodeURIComponent(personalBundlePrefix + "bundle.jsdos");
+            const uploadUrl = encodeURIComponent(rawUrl);
             const archive = await createArchive(config as DosConfig, state.zip as Uint8Array, dos);
+            const publisTokenParam = (publishToken === undefined ? "" :
+                "&publishToken=" + encodeURIComponent(publishToken));
             const result = await postObject(presonalBundlePut + "?namespace=studio&id=" +
-                token + "&bundleUrl=" + uploadUrl);
+            token + "&bundleUrl=" + uploadUrl + publisTokenParam);
 
             if (!result.success) {
                 throw new Error("Unable to put personal bundle: " + result.errorCode);
             }
 
             const payload = JSON.parse(result.payload);
+
+            if (payload.errorMessage !== undefined) {
+                throw new Error(payload.errorMessage);
+            }
+
             const headers = payload.signature as { [name: string]: string };
             const url = payload.url as string;
 
@@ -97,7 +106,7 @@ export function PublishArchive(props: StepProps) {
                 headers);
 
             if (!(await postObject(personalBundleAcl + "?namespace=studio&id=" +
-                token + "&bundleUrl=" + uploadUrl)).success) {
+                token + "&bundleUrl=" + uploadUrl + publisTokenParam)).success) {
                 throw new Error("Can't set ACL to personal bundle:");
             }
 
@@ -107,6 +116,14 @@ export function PublishArchive(props: StepProps) {
         }
 
         setUploading(false);
+    };
+
+    const onUpload = async () => {
+        await doUpload(personalBundlePrefix + "bundle.jsdos");
+    };
+
+    const onPublish = async () => {
+        await doUpload(publishUrl, publishToken);
     };
 
     const onStopStart = () => {
@@ -173,6 +190,28 @@ export function PublishArchive(props: StepProps) {
             <div className="download-archive-layers">
                 <LayersEditor onApply={applyLayersConfig} layersConfig={config.layersConfig} />
             </div>
+        </div>
+
+        <div>
+            <h3>Publish to</h3>
+            <InputGroup className="not-prevent-key-events" value={publishUrl} fill={false}
+                leftIcon={IconNames.SHARE}
+                onChange={(e) => {
+                    setPublishUrl(e.currentTarget.value);
+                }} />
+            <br/>
+            <h3>Token</h3>
+            <InputGroup className="not-prevent-key-events" type="password" value={publishToken}
+                leftIcon={IconNames.LOCK} placeholder="Publish token..."
+                onChange={(e) => {
+                    setPublishToken(e.currentTarget.value);
+                }}/>
+            <br/>
+            <Button intent={Intent.DANGER}
+                disabled={publishUrl.length === 0 || publishToken.length === 0}
+                onClick={onPublish}>
+                Publish
+            </Button>
         </div>
     </div>;
 }
