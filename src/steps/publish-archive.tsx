@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { AnchorButton, Button, ButtonGroup, InputGroup, Intent, Spinner } from "@blueprintjs/core";
+import { Button, ButtonGroup, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import { LayersConfig } from "emulators-ui/dist/types/controls/layers-config";
 import { DosInstance } from "emulators-ui/dist/types/js-dos";
@@ -154,7 +154,7 @@ export function PublishArchive(props: StepProps) {
             <ButtonGroup>
                 <Button onClick={onUpload}
                     icon={IconNames.CLOUD_UPLOAD}
-                    disabled={uploading}
+                    disabled={true || uploading}
                     intent={Intent.PRIMARY}>{ uploading ?
                         <div style={{ display: "flex", flexDirection: "row" }}>
                             <Spinner size={16} />&nbsp;&nbsp;{uploadProgress}%
@@ -164,11 +164,6 @@ export function PublishArchive(props: StepProps) {
                     <Button onClick={onDownload}
                         disabled={uploading}
                         icon={IconNames.ARCHIVE}></Button> }
-                <AnchorButton
-                    href="https://talks.dos.zone/"
-                    target="_blank"
-                    intent={Intent.SUCCESS}
-                    icon={IconNames.SEND_MESSAGE} />
             </ButtonGroup>
         </div>
         { error !== null ? <div style={{ color: "#C23030" }}>Unexpected error: {error}</div> : null }
@@ -208,7 +203,7 @@ export function PublishArchive(props: StepProps) {
                 }}/>
             <br/>
             <Button intent={Intent.DANGER}
-                disabled={publishUrl.length === 0 || publishToken.length === 0}
+                disabled={true || publishUrl.length === 0 || publishToken.length === 0}
                 onClick={onPublish}>
                 Publish
             </Button>
