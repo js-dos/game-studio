@@ -1,4 +1,6 @@
-# DOS.Zone Game Studio
+# DOS.Zone Game Studio v7
+
+**THIS IS LEGACY VERSION, NOW STUDIO IS A PART OF JS-DOS**
 
 Game Studio is a tool for creation \`js-dos bundles\`. You can think about bundle like a single archive that contains everything to run DOS program ([read more](https://js-dos.com/v7/build/docs/#js-dos-bundle--doszone)).
 
